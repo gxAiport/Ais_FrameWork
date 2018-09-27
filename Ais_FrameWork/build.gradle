@@ -1,0 +1,252 @@
+apply plugin: 'java'
+
+//定义GroupID和Version，ArtefactID会自动使用Project名  
+group = 'com.github.zhangyuxs'  
+version = '0.9.0'  
+sourceCompatibility = 1.8  
+ 
+
+repositories {
+   mavenCentral()
+   maven { url "http://dev.mapfish.org/maven/repository/" } 
+   maven { url "http://jasperreports.sourceforge.net/maven2" } 
+}
+
+dependencies {
+    compile 'org.springframework:spring-context:4.3.11.RELEASE'
+	compile 'org.hibernate:hibernate-jpamodelgen:5.0.1.Final:'
+	compile 'commons-beanutils:commons-beanutils:1.9.3'
+  	compile 'com.fasterxml.jackson.core:jackson-core:2.6.3'
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.6.3'	
+    compile 'org.apache.commons:commons-lang3:3.6'
+    compile 'javax:javaee-api:6.0'
+    compile fileTree(dir: 'libs', include: '*.jar')
+}
+
+task createJavaProject << {
+    sourceSets*.java.srcDirs*.each { it.mkdirs() }
+    sourceSets*.resources.srcDirs*.each { it.mkdirs()}
+}
+
+task AodbEjbJar(type:Jar) {
+    copy {
+        from 'src/main/resources/persistence/aodb/persistence.xml'
+        into "bin/META-INF/"
+    }
+    baseName 'Aodb_Ejb'
+    from 'bin'
+    include('com/airport/ais/enums/**',
+            'com/airport/ais/dao/*.class',
+            'com/airport/ais/dao/impl/AodbDaoImpl.class',
+            'com/airport/ais/dao/impl/DaoImpl.class',
+            'com/airport/ais/dao/parameter/**',
+            'com/airport/ais/models/DefaultEntity.class',
+            'com/airport/ais/models/IntIdEntity.class',
+            'com/airport/ais/models/aodb/**',
+            'com/airport/ais/models/settlement/**',
+            'com/airport/ais/service/IService.class',
+            'com/airport/ais/service/IAodbService.class',
+            'com/airport/ais/service/aodb/**',
+            'com/airport/ais/service/impl/AodbService.class',
+            'com/airport/ais/service/impl/Service.class',
+            'com/airport/ais/utils/**',
+            'META-INF/**'
+    )
+    destinationDir = file('D:/EAP-6.3.0/jboss-eap-6.3/standalone/deployments')
+}
+
+task GeneralEjbJar(type:Jar) {
+   copy {
+        from 'src/main/resources/persistence/general/persistence.xml'
+        into "bin/META-INF/"
+    }
+    baseName 'General_Ejb'
+    from 'bin'
+      include('com/airport/ais/enums/**',
+            'com/airport/ais/dao/*.class',
+            'com/airport/ais/dao/impl/GeneralDaoImpl.class',
+            'com/airport/ais/dao/impl/DaoImpl.class',
+            'com/airport/ais/dao/parameter/**',
+            'com/airport/ais/models/DefaultEntity.class',
+            'com/airport/ais/models/IntIdEntity.class',
+            'com/airport/ais/models/collection/**',
+            'com/airport/ais/models/view/**',
+            'com/airport/ais/models/report/**',
+            'com/airport/ais/service/IService.class',
+            'com/airport/ais/service/IGeneralService.class',
+            'com/airport/ais/service/impl/GeneralService.class',
+            'com/airport/ais/service/impl/Service.class',
+            'com/airport/ais/utils/**',
+            'META-INF/**'
+    )
+    destinationDir = file('D:/EAP-6.3.0/jboss-eap-6.3/standalone/deployments')
+}
+
+task NNGAodbEjbJar(type:Jar) {
+    copy {
+        from 'src/main/resources/persistence/nngAodb/persistence.xml'
+        into{'bin/META-INF/'}
+    }
+    baseName 'nng_Aodb_Ejb'
+    from 'bin'
+       include('com/airport/ais/enums/**',
+            'com/airport/ais/dao/*.class',
+            'com/airport/ais/dao/impl/NNGAodbDaoImpl.class',
+            'com/airport/ais/dao/impl/DaoImpl.class',
+            'com/airport/ais/dao/parameter/**',
+            'com/airport/ais/models/DefaultEntity.class',
+            'com/airport/ais/models/IntIdEntity.class',
+            'com/airport/ais/models/aodb/**',
+            'com/airport/ais/service/IService.class',
+            'com/airport/ais/service/INNGAodbService.class',
+            'com/airport/ais/service/impl/NNGAodbService.class',
+            'com/airport/ais/service/impl/Service.class',
+            'com/airport/ais/utils/**',
+            'META-INF/**'
+    )
+    destinationDir = file('D:/EAP-6.3.0/jboss-eap-6.3/standalone/deployments')
+}
+
+task NNGWebEjbJar(type:Jar) {
+    copy {
+        from 'src/main/resources/persistence/nngWeb/persistence.xml'
+        into "bin/META-INF/"
+    }
+    baseName 'nng_Web_Ejb'
+    from 'bin'
+    include('com/airport/ais/enums/**',
+            'com/airport/ais/dao/*.class',
+            'com/airport/ais/dao/impl/NNGWebDaoImpl.class',
+            'com/airport/ais/dao/impl/DaoImpl.class',
+            'com/airport/ais/dao/parameter/**',
+            'com/airport/ais/models/DefaultEntity.class',
+            'com/airport/ais/models/IntIdEntity.class',
+            'com/airport/ais/models/nng/**',
+            'com/airport/ais/service/IService.class',
+            'com/airport/ais/service/INNGWebService.class',
+            'com/airport/ais/service/impl/NNGWebService.class',
+            'com/airport/ais/service/impl/Service.class',
+            'com/airport/ais/utils/**',
+            'META-INF/**'
+    )
+    destinationDir = file('build/jar')
+}
+
+task NNGAommsEjbJar(type:Jar) {
+    copy {
+        from 'src/main/resources/persistence/nngAomms/persistence.xml'
+        into "bin/META-INF/"
+    }
+    baseName 'nng_Aomms_Ejb'
+    from 'bin'
+    include('com/airport/ais/enums/**',
+            'com/airport/ais/dao/*.class',
+            'com/airport/ais/dao/impl/NNGAommsDaoImpl.class',
+            'com/airport/ais/dao/impl/DaoImpl.class',
+            'com/airport/ais/dao/parameter/**',
+            'com/airport/ais/models/nng/AommsDcsLegInfo.class',
+            'com/airport/ais/models/nng/AommsDcsLegInfoPK.class',
+            'com/airport/ais/models/nng/VAommsInfo.class',
+            'com/airport/ais/service/IService.class',
+            'com/airport/ais/service/INNGAommsService.class',
+            'com/airport/ais/service/impl/NNGAommsService.class',
+            'com/airport/ais/service/impl/Service.class',
+            'com/airport/ais/utils/**',
+            'META-INF/**'
+    )
+	destinationDir = file('build/jar')
+}
+
+task KwlAodbEjbJar(type:Jar) {
+    copy {
+        from 'src/main/resources/persistence/nngWeb/persistence.xml'
+        into "bin/META-INF/"
+    }
+    baseName 'kwl_Aodb_Ejb'
+    from 'bin'
+    include('com/airport/ais/enums/**',
+            'com/airport/ais/dao/*.class',
+            'com/airport/ais/dao/impl/KwlAodbDaoImpl.class',
+            'com/airport/ais/dao/impl/DaoImpl.class',
+            'com/airport/ais/dao/parameter/**',
+            'com/airport/ais/models/DefaultEntity.class',
+            'com/airport/ais/models/IntIdEntity.class',
+            'com/airport/ais/models/kwl/AommsDcsFlightInfo.class',
+            'com/airport/ais/models/kwl/AommsDcsLegInfo.class',
+            'com/airport/ais/models/kwl/ODyFlightMaxEvent.class',
+            'com/airport/ais/models/kwl/ODyFlightMaxEvent$EventId.class',
+            'com/airport/ais/models/kwl/ODyFlightSched_FIM.class',
+            'com/airport/ais/models/kwl/VAommsCarInfo.class',
+            'com/airport/ais/models/kwl/VAommsCarInfo$AommsId.class',
+            'com/airport/ais/service/IService.class',
+            'com/airport/ais/service/IKwlAodbService.class',
+            'com/airport/ais/service/impl/KwlAodbService.class',
+            'com/airport/ais/service/impl/Service.class',
+            'com/airport/ais/utils/**',
+            'META-INF/**'
+    )
+    destinationDir = file('D:/EAP-6.3.0/jboss-eap-6.3/standalone/deployments')
+}
+
+task KwlFidsEjbJar(type:Jar) {
+    copy {
+        from 'src/main/resources/persistence/kwlFids/persistence.xml'
+        into "bin/META-INF/"
+    }
+    baseName 'kwl_Fids_Ejb'
+    from 'bin'
+    include('com/airport/ais/enums/**',
+            'com/airport/ais/dao/*.class',
+            'com/airport/ais/dao/impl/KwlFidsDaoImpl.class',
+            'com/airport/ais/dao/impl/DaoImpl.class',
+            'com/airport/ais/dao/parameter/**',
+            'com/airport/ais/models/DefaultEntity.class',
+            'com/airport/ais/models/IntIdEntity.class',
+            'com/airport/ais/models/kwl/BagEasyFlightEvent.class',
+            'com/airport/ais/models/kwl/FlightEvent.class',
+            'com/airport/ais/models/kwl/FlightEventPK.class',
+            'com/airport/ais/service/IService.class',
+            'com/airport/ais/service/IKwlFidsService.class',
+            'com/airport/ais/service/impl/KwlFidsService.class',
+            'com/airport/ais/service/impl/Service.class',
+            'com/airport/ais/utils/**',
+            'META-INF/**'
+    )
+    destinationDir = file('D:/EAP-6.3.0/jboss-eap-6.3/standalone/deployments')
+}
+
+
+
+task TimerServiceJar(type:Jar) {
+
+    baseName 'TimerService'
+    from 'bin'
+    include('com/airport/ais/timer/**')
+    destinationDir = file('D:/EAP-6.3.0/jboss-eap-6.3/standalone/deployments')
+}
+
+
+
+
+task AisFrameWorkJar(type:Jar) {
+    from 'bin'
+    include('com/airport/ais/enums/**',
+            'com/airport/ais/dao/*.class',
+            'com/airport/ais/dao/parameter/**',
+            'com/airport/ais/models/**',
+            'com/airport/ais/service/*.class',
+            'com/airport/ais/service/aodb/*.class',
+            'com/airport/ais/service/*.class',
+            'com/airport/ais/report/**',
+            'com/airport/ais/utils/**'
+    )
+    destinationDir = file('build/jar')
+}
+
+task copy () {
+    copy {
+        from 'src/main/resources/persistence/general/persistence.xml'
+        into{'bin/META-INF/'}
+    }
+}
+
